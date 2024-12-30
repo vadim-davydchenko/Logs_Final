@@ -1,0 +1,13 @@
+<source>
+  @type kafka
+  brokers {{ fluentd_kafka_brokers }}
+  topics {{ fluentd_kafka_topic }}
+  format json
+</source>
+
+<match **>
+  @type elasticsearch
+  hosts {{ fluentd_es_hosts }}
+  index_name {{ fluentd_index_name }}
+  logstash_format true
+</match>

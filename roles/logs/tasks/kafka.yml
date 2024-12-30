@@ -1,0 +1,39 @@
+- name: Install JRE
+  ansible.builtin.apt:
+    name: default-jre
+    state: present
+    update_cache: true
+
+- name: Download Kafka
+  ansible.builtin.get_url:
+    url: https://downloads.apache.org/kafka/3.4.0/kafka_{{ kafka_version }}.tgz
+    dest: /tmp/kafka_{{ kafka_version }}.tgz
+    mode: "0644"
+
+- name: Extract Kafka
+  ansible.builtin.unarchive:
+    src: /tmp/kafka_{{ kafka_version }}.tgz
+    dest: /opt/kafka
+    remote_src: true
+
+- name: Configure Zookeeper
+  ansible.builtin.template:
+    src: zookeeper.service.j2
+    dest: /etc/systemd/system/zookeeper.service
+    mode: "0644"
+
+- name: Configure Kafka
+  ansible.builtin.template:
+    src: kafka.service.j2
+    dest: /etc/systemd/system/kafka.service
+    mode: "0644"
+
+- name: Start Zookeeper
+  ansible.builtin.service:
+    name: zookeeper
+    state: started
+
+- name: Start Kafka
+  ansible.builtin.service:
+    name: kafka
+    state: started

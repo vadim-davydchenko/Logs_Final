@@ -1,0 +1,4 @@
+server.port: 5601
+server.host: "{{ ansible_host }}"
+server.name: "kibana"
+elasticsearch.hosts: [{{ elasticsearch_nodes | map(attribute='ip') | join(',') }}]

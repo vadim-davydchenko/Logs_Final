@@ -1,0 +1,28 @@
+<source>
+  @type tail
+  path /var/log/syslog,/var/log/*.log, /var/log/nginx/*.log
+  pos_file /var/log/td-agent/syslog.pos
+  tag syslog
+  format syslog
+</source>
+
+<match **>
+  @type kafka2
+  brokers {{ fluentd_kafka_brokers }}
+  default_topic log_topic
+  output_data_type json
+  output_include_tag true
+  output_include_time true
+  <format>
+    @type json
+  </format>
+  <buffer>
+    @type memory
+    flush_thread_count 4
+    flush_interval 5s
+    chunk_limit_size 5M
+    queue_limit_length 128
+    retry_max_interval 30
+    overflow_action block
+  </buffer>
+</match>

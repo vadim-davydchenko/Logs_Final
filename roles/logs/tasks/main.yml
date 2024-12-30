@@ -1,0 +1,14 @@
+- name: Set up Elasticsearch
+  ansible.builtin.include_tasks: elasticsearch.yml
+
+- name: Set up Kibana
+  ansible.builtin.include_tasks: kibana.yml
+
+- name: Set up Kafka
+  ansible.builtin.include_tasks: kafka.yml
+
+- name: Set up Fluentd for Kafka to Elasticsearch
+  ansible.builtin.include_tasks: fluentd_kafka_to_es.yml
+
+- name: Set up Fluentd for system and application logs to Kafka
+  ansible.builtin.include_tasks: fluentd_logs_to_kafka.yml

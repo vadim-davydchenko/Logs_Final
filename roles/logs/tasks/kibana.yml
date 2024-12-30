@@ -1,0 +1,21 @@
+- name: Download Kibana
+  ansible.builtin.get_url:
+    url: https://artifacts.elastic.co/downloads/kibana/kibana-{{ kibana_version }}-amd64.deb
+    dest: /tmp/kibana-{{ kibana_version }}-amd64.deb
+    mode: "0644"
+
+- name: Install Kibana
+  ansible.builtin.apt:
+    name: /tmp/kibana-{{ kibana_version }}-amd64.deb
+    state: present
+
+- name: Configure Kibana
+  ansible.builtin.template:
+    src: kibana.yml.j2
+    dest: /etc/kibana/kibana.yml
+    mode: "0644"
+
+- name: Start Kibana
+  ansible.builtin.service:
+    name: kibana
+    state: started

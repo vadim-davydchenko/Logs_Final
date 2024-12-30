@@ -1,0 +1,12 @@
+elasticsearch_version: "8.6.1"
+kibana_version: "8.6.1"
+kafka_version: "2.12-3.4.0"
+elasticsearch_cluster_name: "es-cluster"
+elasticsearch_nodes:
+  - { name: "node1", ip: "10.110.0.4", roles: ["master", "data"] }
+  - { name: "node2", ip: "10.110.0.6", roles: ["master", "data"] }
+  - { name: "node3", ip: "10.110.0.2", roles: ["master", "data"] }
+fluentd_kafka_brokers: "10.110.0.4:9092"
+fluentd_kafka_topic: "log_topic"
+fluentd_es_hosts: "10.110.0.6:9200,10.110.0.2:9200,10.110.0.5:9200"
+fluentd_index_name: "syslogs"

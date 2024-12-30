@@ -1,0 +1,38 @@
+- name: Download Elasticsearch
+  ansible.builtin.get_url:
+    url: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elasticsearch_version }}-amd64.deb
+    dest: /tmp/elasticsearch-{{ elasticsearch_version }}-amd64.deb
+    mode: "0644"
+  with_items: "{{ elasticsearch_nodes }}"
+
+- name: Install Elasticsearch
+  ansible.builtin.apt:
+    name: /tmp/elasticsearch-{{ elasticsearch_version }}-amd64.deb
+    state: present
+  with_items: "{{ elasticsearch_nodes }}"
+
+- name: Configure Elasticsearch
+  ansible.builtin.template:
+    src: elasticsearch.yml.j2
+    dest: /etc/elasticsearch/elasticsearch.yml
+    mode: "0644"
+  loop: "{{ elasticsearch_nodes }}"
+  loop_control:
+    loop_var: elastic_node
+
+- name: Configure system parameters
+  ansible.builtin.shell: |
+    swapoff -a
+    sysctl -w vm.max_map_count=262144
+  loop: "{{ elasticsearch_nodes }}"
+  loop_control:
+    loop_var: elastic_node
+  changed_when: false
+
+- name: Start Elasticsearch
+  ansible.builtin.service:
+    name: elasticsearch
+    state: started
+  loop: "{{ elasticsearch_nodes }}"
+  loop_control:
+    loop_var: elastic_node

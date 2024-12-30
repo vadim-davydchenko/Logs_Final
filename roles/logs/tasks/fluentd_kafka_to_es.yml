@@ -1,0 +1,26 @@
+- name: Download Fluentd
+  ansible.builtin.get_url:
+    url: https://toolbelt.treasuredata.com/sh/install-ubuntu-focal-td-agent4.sh
+    dest: install-ubuntu-focal-td-agent4.sh
+    mode: "0755"
+
+- name: Install Fluentd
+  ansible.builtin.shell: |
+    bash install-ubuntu-focal-td-agent4.sh
+  changed_when: false
+
+- name: Start Fluentd
+  ansible.builtin.service:
+    name: td-agent
+    state: started
+
+- name: Configure Fluentd
+  ansible.builtin.template:
+    src: fluentd_kafka_to_es.conf.j2
+    dest: /etc/td-agent/td-agent.conf
+    mode: "0644"
+
+- name: Restart Fluentd
+  ansible.builtin.service:
+    name: td-agent
+    state: restarted

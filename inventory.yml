@@ -1,0 +1,18 @@
+all:
+  children:
+    elasticsearch:
+      hosts:
+        node1:
+          ansible_host: 10.110.0.4
+        node2:
+          ansible_host: 10.110.0.6
+        node3:
+          ansible_host: 10.110.0.2
+    kibana:
+      hosts:
+        kibana:
+          ansible_host: 161.35.154.61
+    kafka:
+      hosts:
+        kafka:
+          ansible_host: 10.110.0.4

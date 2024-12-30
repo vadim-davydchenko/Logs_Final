@@ -1,0 +1,11 @@
+cluster.name: {{ elasticsearch_cluster_name }}
+node.name: {{ elastic_node.name }}
+node.roles: {{ elastic_node.roles }}
+network.host: {{ elastic_node.ip }}
+discovery.seed_hosts: {{ elasticsearch_nodes | map(attribute='ip') | list }}
+cluster.initial_master_nodes: {{ elasticsearch_nodes | map(attribute='name') | list }}
+xpack.security.enabled: false
+xpack.security.enrollment.enabled: false
+xpack.security.http.ssl.enabled: false
+xpack.security.transport.ssl.enabled: false
+ingest.geoip.downloader.enabled: false
